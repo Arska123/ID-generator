@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <title>Calculator</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-weight: normal;
+        }
+        td input {
+            width: 90px;
+            height: 10px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <h3>ID input</h3>
+        <tr>
+            <td><input id="PersonalID"/></td>
+            <td><button onclick="IDChecker()">Check ID</button></td>
+        </tr>
+        <tr>
+            <td><p>is valid:</p></td>
+            <td><p id="Validity"></p></td>
+        </tr>
+        <tr>
+            <td><p>sex:</p></td>
+            <td><p id="Sex"></p></td>
+        </tr>
+        <tr>
+            <td><p>age:</p></td>
+            <td><p id="Age"></p></td>
+        </tr>
+        <tr>
+            <td><br>age(full):</td>
+            <td><p id="FullAge"></p></td>
+        </tr>
+        <p id="Done"></p>
+    </table>
+
+    <table>
+        <h3>Create ID</h3>
+        <tr>
+            <td>Input:</td>
+            <td><input type="text" id="FirstPartID" maxlength="6"></td>
+            
+            <td><div><select id="Mark">
+                <option value="+">+</option>
+                <option value="-">-</option>
+                <option value="A">A</option>
+            </select></div></td>
+            
+            <td><input type="text" id="SecondPartID" maxlength="3"></td>
+            <td><button onclick="IDCreator()">Create ID</button></td>
+        </tr>
+        <tr>
+            <td>Output:</td>
+            <td><p id="LastSymbol"></p></td>
+        </tr>
+    </table>
+
+        <script>
+            function IDChecker(){
+                var IDCache = document.getElementById("PersonalID").value;
+                var century = ['+','-','A']
+                var today = new Date()
+                var now = today.getFullYear()
+                let month = parseInt(IDCache.slice(2,4))
+                let day = parseInt(IDCache.slice(0,2))
+                let yearStr = IDCache.slice(4,6)
+                let year = parseInt(yearStr)
+                let hundredsYears = IDCache.slice(6,7)
+                let sex = parseInt(IDCache.slice(7,10))
+                
+                document.getElementById("Done").innerHTML = "Calculations were done on " + today.getDate() + '.'+ (today.getMonth()+1) + '.' + today.getFullYear();
+
+                if(IDCache.length != 11){
+                    document.getElementById("Validity").innerHTML = "false, doesn't match finnish ID structure";
+                    document.getElementById("Sex").innerHTML = "Unavaileable";
+                    document.getElementById("Age").innerHTML = "Unavaileable";
+                    document.getElementById("FullAge").innerHTML = "Unavaileable";
+                }else if(!century.includes(hundredsYears)){
+                    document.getElementById("Validity").innerHTML = "false, incorrect century index";
+                    document.getElementById("Sex").innerHTML = "Unavaileable";
+                    document.getElementById("Age").innerHTML = "Unavaileable";
+                    document.getElementById("FullAge").innerHTML = "Unavaileable";
+                }else if(month > 12){
+                    document.getElementById("Validity").innerHTML = "false, incorrect month";
+                    document.getElementById("Sex").innerHTML = "Unavaileable";
+                    document.getElementById("Age").innerHTML = "Unavaileable";
+                    document.getElementById("FullAge").innerHTML = "Unavaileable";
+                }else if(month == 02){
+                    if(year % 4 == 0){
+                        if(day > 29){
+                            document.getElementById("Validity").innerHTML = "false, incorrect month or day";
+                            document.getElementById("Sex").innerHTML = "Unavaileable";
+                            document.getElementById("Age").innerHTML = "Unavaileable";
+                            document.getElementById("FullAge").innerHTML = "Unavaileable";
+                        }else if(day > 28){
+                            document.getElementById("Validity").innerHTML = "false, incorrect month or day";
+                            document.getElementById("Sex").innerHTML = "Unavaileable";
+                            document.getElementById("Age").innerHTML = "Unavaileable";
+                            document.getElementById("FullAge").innerHTML = "Unavaileable";
+                        }
+                    }
+                }else if([4,6,9,11].includes(month)){
+                    if(day > 30){
+                        document.getElementById("Validity").innerHTML = "false, incorrect month or day";
+                        document.getElementById("Sex").innerHTML = "Unavaileable";
+                        document.getElementById("Age").innerHTML = "Unavaileable";
+                        document.getElementById("FullAge").innerHTML = "Unavaileable";
+                    }
+                }else if(day > 31){
+                    document.getElementById("Validity").innerHTML = "false, incorrect month or day";
+                    document.getElementById("Sex").innerHTML = "Unavaileable";
+                    document.getElementById("Age").innerHTML = "Unavaileable";
+                    document.getElementById("FullAge").innerHTML = "Unavaileable";
+                }else{
+                    document.getElementById("Validity").innerHTML = "true";
+                    if(sex % 2 == 0){
+                        document.getElementById("Sex").innerHTML = "female";
+                    }else{
+                        document.getElementById("Sex").innerHTML = "male";
+                    }
+                    
+                    if(hundredsYears == 'A'){
+                        let ageStr = '20' + yearStr
+                        var age = parseInt(ageStr);
+                    }else if(hundredsYears == '-'){
+                        let ageStr = '19' + yearStr
+                        var age = parseInt(ageStr);
+                    }else{
+                        let ageStr = '18' + yearStr
+                        var age = parseInt(ageStr);
+                    }
+                    document.getElementById("Age").innerHTML = now - age;
+                    let agecalc = ((now * 365)+(today.getMonth()*30)+today.getDate())-((age*365)+(month*30)+day)
+                    let _years = Math.floor(agecalc/365)
+                    let _months = Math.floor((agecalc-(_years*365))/30)
+                    let _days = Math.floor(agecalc-(_years*365))
+                    document.getElementById("FullAge").innerHTML = _years + ' years, ' + _months + ' months, ' + _days + ' days.';
+                }
+            }
+            function IDCreator(){
+                var first = document.getElementById("FirstPartID").value;
+                var mark = document.getElementById("Mark").value;
+                var last = document.getElementById("SecondPartID").value;
+                var number = first + last;
+                let IDCalc = parseInt(number);
+                let calc = IDCalc/31;
+                let roundCalc = Math.round(calc);
+                let count = calc - roundCalc
+                let roundCount = Math.round(count*31)
+                const values = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','H','J','K',
+                                'L','M','P','R','S','T','U','V','W','X','Y']
+                if(parseInt(first.slice(0,2))>31){
+                    document.getElementById("LastSymbol").innerHTML = "Incorrect day";
+                }else if(parseInt(first.slice(2,4))>12){
+                    document.getElementById("LastSymbol").innerHTML = "Incorrect month";
+                }else{
+                    document.getElementById("LastSymbol").innerHTML = values.slice(roundCount, roundCount+1);
+                }
+            }
+        </script>
+</body>
