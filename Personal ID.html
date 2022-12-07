@@ -61,6 +61,8 @@
         <tr>
             <td>Output:</td>
             <td><p id="LastSymbol"></p></td>
+            <td>Full ID:</td>
+            <td><p id="FullID"></p></td>
         </tr>
     </table>
 
@@ -142,7 +144,7 @@
                     let agecalc = ((now * 365)+(today.getMonth()*30)+today.getDate())-((age*365)+(month*30)+day)
                     let _years = Math.floor(agecalc/365)
                     let _months = Math.floor((agecalc-(_years*365))/30)
-                    let _days = Math.floor(agecalc-(_years*365))
+                    let _days = Math.floor(((agecalc-(_years*365))-_months*30))
                     document.getElementById("FullAge").innerHTML = _years + ' years, ' + _months + ' months, ' + _days + ' days.';
                 }
             }
@@ -164,7 +166,8 @@
                     document.getElementById("LastSymbol").innerHTML = "Incorrect month";
                 }else{
                     document.getElementById("LastSymbol").innerHTML = values.slice(roundCount, roundCount+1);
-                }
+                    document.getElementById("FullID").innerHTML = first + mark + last + values.slice(roundCount, roundCount+1);
+                }   
             }
         </script>
 </body>
