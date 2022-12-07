@@ -141,11 +141,11 @@
                         var age = parseInt(ageStr);
                     }
                     document.getElementById("Age").innerHTML = now - age;
-                    let agecalc = ((now * 365)+(today.getMonth()*30)+today.getDate())-((age*365)+(month*30)+day)
+                    let agecalc = ((now * 365)+(today.getMonth()*(365/12))+today.getDate())-((age*365)+(month*(365/12))+day)
                     let _years = Math.floor(agecalc/365)
-                    let _months = Math.floor((agecalc-(_years*365))/30)
-                    let _days = Math.floor(((agecalc-(_years*365))-_months*30))
-                    document.getElementById("FullAge").innerHTML = _years + ' years, ' + _months + ' months, ' + _days + ' days.';
+                    let _months = Math.floor((agecalc-(_years*365))/(365/12))
+                    let _days = Math.floor(((agecalc-(_years*365))-_months*(365/12)))
+                    document.getElementById("FullAge").innerHTML = _years + ' years, ' + (_months+1) + ' months, ' + _days + ' days.';
                 }
             }
             function IDCreator(){
